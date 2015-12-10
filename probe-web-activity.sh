@@ -8,6 +8,11 @@
 # X dead (should never be seen)
 # Z Defunct ("zombie") process, terminated but not reaped by its parent.
 
+if [ "$1" == "stop" ] ; then
+    killall probe-web-activity.sh
+    exit 0
+fi
+
 log_file="/var/log/probe-web-activity.log"
 # default 300, 15 minutes
 iter=300;
@@ -36,9 +41,7 @@ function log_activity {
 
 me_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 me_FILE=$(basename $0)
-
-
-if [ "$1" != "child" ] ; then # fork the process.
+if [ "$1" != "child" ] && [ "$1" != "stop" ] ; then # fork the process.
     exec $me_DIR/$me_FILE child "$@" &
     exit 0
 fixit 0
