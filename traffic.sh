@@ -11,11 +11,14 @@ function traffic_end {
 		do
 			files=$files" $log_dir/$probe_name-audit-$host.csv";
 		done
-		echo "You could open these reporting files with Open Office typing these kinds of command"
-		for app in $soffice_installed
-		do
-			echo "$app $files &"
-		done
+
+		if [ "$files" != "" ] ; then
+			echo "You could open these reporting files with Open Office typing these kinds of command"
+			for app in $soffice_installed
+			do
+				echo "$app $files &"
+			done
+		fi
 		
 	fi
 }
