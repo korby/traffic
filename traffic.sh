@@ -1,5 +1,7 @@
 #!/bin/bash
 cd "$( dirname "${BASH_SOURCE[0]}" )"
+args_tab=( $@ )
+args_tab_len=${#args_tab[@]}
 
 function traffic_end {
 	traffic_stats
@@ -97,8 +99,8 @@ yellow='\033[33m'
 std="\033[0m"
 log_dir=/tmp
 file=""
-url="${@: -2}"
-iter="${@: -1}"
+url="${args_tab[$args_tab_len-2]}"
+iter="${args_tab[$args_tab_len-1]}"
 user=""
 passwd=""
 probe_dir=/tmp
@@ -140,6 +142,8 @@ c=1
 while [ $c -le $iter ]
 do
   if [ "$file" = "" ] ; then
+  	# for debug:
+  	# echo 'executing : exec wget -E -H -p -P "traffic-work-'$c'" '$url' '$auth' -o '$log_dir'/traffic-log-'$c' 2>$log_dir/traffic-err &'
 	exec wget -E -H -p -P "traffic-work-$c" $url $auth -o $log_dir/traffic-log-$c 2>$log_dir/traffic-err &
   elif [ -f $file ] ; then
 	exec wget -E -H -p -P "traffic-work-$c" -i $file $auth -o $log_dir/traffic-log-$c 2>$log_dir/traffic-err &
